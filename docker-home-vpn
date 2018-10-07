@@ -1,0 +1,8 @@
+docker volume create --name ovpn-data-lair
+docker run -v ovpn-data-lair:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_genconfig -u udp://HOSTNAME
+docker run -v ovpn-data-lair:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn ovpn_initpki
+
+docker run -v ovpn-data-lair:/etc/openvpn -d -p 1194:1194/udp --cap-add=NET_ADMIN kylemanna/openvpn
+
+docker run -v ovpn-data-lair:/etc/openvpn --log-driver=none --rm -it kylemanna/openvpn easyrsa build-client-full USERNAME nopass
+docker run -v ovpn-data-lair:/etc/openvpn --log-driver=none --rm kylemanna/openvpn ovpn_getclient USERNAME > PATH/USERNAME.ovpn
